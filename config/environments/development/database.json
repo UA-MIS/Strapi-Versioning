@@ -1,0 +1,17 @@
+{
+  "defaultConnection": "default",
+  "connections": {
+    "default": {
+      "connector": "bookshelf",
+      "settings": {
+        "client": "mysql",
+        "database": "capstone",
+        "host": "capstone-strapi-versioning-instance-1.cdpfsdydz7dw.us-east-1.rds.amazonaws.com",
+        "port": 3306,
+        "username": "capstoneAdmin",
+        "password": "FGtAB8LiSNXtSu"
+      },
+      "options": {}
+    }
+  }
+}
