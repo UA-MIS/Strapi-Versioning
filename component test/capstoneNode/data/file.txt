@@ -1,0 +1,1 @@
+This file has been uploaded to the S3 bucket from a NodeJS component. This is now the version test. Here is version 2.
