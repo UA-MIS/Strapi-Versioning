@@ -59,7 +59,7 @@ $RECYCLE.BIN/
 *.swm
 *.out
 *.pid
-
+.env
 
 ############################
 # Logs and databases
