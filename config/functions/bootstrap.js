@@ -1,5 +1,5 @@
 'use strict';
-
+//require('dotenv').config();
 /**
  * An asynchronous bootstrap function that runs before
  * your application gets started.
@@ -9,5 +9,5 @@
  *
  * See more details here: https://strapi.io/documentation/3.0.0-beta.x/concepts/configurations.html#bootstrap
  */
-
+require('dotenv').config({ path: require('find-config')('.env') })
 module.exports = () => {};
