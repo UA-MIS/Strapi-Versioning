@@ -1,0 +1,25 @@
+{
+  "info": {
+    "name": "Object Testing"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "ObjectName": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "Description": {
+      "type": "richtext"
+    },
+    "TestBoolean": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "connection": "default",
+  "collectionName": "object_testings"
+}
