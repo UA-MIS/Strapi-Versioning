@@ -36,7 +36,7 @@ module.exports = {
 
     var getParams = {
       Bucket: process.env.AWS_BUCKET,
-      Key: 'newObject',
+      Key: params.id + '.JSON',
       //VersionId: '8LmPm9ryal27CWDDU4pXV_KyKLFP9klP'
   }
 
@@ -44,7 +44,7 @@ module.exports = {
     dataReturned = JSON.parse(dataReturned.Body.toString())
     console.log(dataReturned)
     return dataReturned;
-    
+
     // return strapi.entityService.findOne(
     //   {
     //     params: {
@@ -63,13 +63,17 @@ module.exports = {
     return strapi.entityService.count({ params: filters }, { model });
   },
 
-  create(data, { files, model } = {}) {
+  async create(data, { files, model } = {}) {
     var bufferObject = new Buffer.from(JSON.stringify(data, {files, model}))
+    var keyID;
+    var dataCreated = await strapi.entityService.create({ data, files }, { model }).then(function(response){
+      keyID = response.id
+    });
 
     var awsParams = {
       Bucket: process.env.AWS_BUCKET,
       Body: bufferObject,
-      Key: data.ObjectName
+      Key: keyID + '.JSON'
     }
     s3.upload(awsParams, function (err, data2) {
       if (err) {
@@ -77,10 +81,10 @@ module.exports = {
       }
 
       if (data2) {
-        console.log("Uploaded in:", data.location);
+        console.log("Uploaded in:", data2.location);
       }
     })
-    return strapi.entityService.create({ data, files }, { model });
+    return keyID;
   },
 
   edit(params, data, { model, files } = {}) {
@@ -89,7 +93,7 @@ module.exports = {
     var awsParams = {
       Bucket: process.env.AWS_BUCKET,
       Body: bufferObject,
-      Key: data.ObjectName
+      Key: params.id + '.JSON'
     }
     s3.upload(awsParams, function (err, data2) {
       if (err) {
@@ -97,7 +101,7 @@ module.exports = {
       }
 
       if (data2) {
-        console.log("Uploaded in:", data.location);
+        console.log("Uploaded in:", data2.location);
       }
     })
     return strapi.entityService.update({ params, data, files }, { model });
@@ -107,9 +111,8 @@ module.exports = {
     const { id, model } = params;
 
     var getParams = {
-      Bucket: 'strapi.capstone.versioning',
-      Key: 'NewRestaurantObject.json',
-      //VersionId: '8LmPm9ryal27CWDDU4pXV_KyKLFP9klP'
+      Bucket: process.env.AWS_BUCKET,
+      Key: params.id + '.JSON',
   }
 
     s3.deleteObject(getParams, function(err, data) {
