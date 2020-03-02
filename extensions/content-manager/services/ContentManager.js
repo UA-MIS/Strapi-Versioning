@@ -130,6 +130,22 @@ module.exports = {
 
   deleteMany(params, query) {
     const { model } = params;
+    var modelName = model.split(".")
+
+    for (var id in query){
+      var getParams = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: modelName[1] + '/' + query[id] + '.JSON',
+      }
+      console.log(id)
+      s3.deleteObject(getParams, function(err, data) {
+        if (err) {
+        console.log(err, err.stack)
+        } else {
+        console.log(data)
+        }
+      })
+    }
 
     const { primaryKey } = strapi.query(model);
     const filter = { [`${primaryKey}_in`]: Object.values(query), _limit: 100 };
