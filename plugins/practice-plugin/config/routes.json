@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/s-3-s",
+      "handler": "s3.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/s-3-s/count",
+      "handler": "s3.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/s-3-s/:id",
+      "handler": "s3.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/s-3-s",
+      "handler": "s3.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/s-3-s/:id",
+      "handler": "s3.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/s-3-s/:id",
+      "handler": "s3.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

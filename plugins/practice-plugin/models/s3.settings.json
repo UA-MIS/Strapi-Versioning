@@ -1,0 +1,14 @@
+{
+  "connection": "default",
+  "collectionName": "s_3_s",
+  "info": {
+    "name": "s3",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {}
+}
