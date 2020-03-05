@@ -6,6 +6,7 @@ import React, {
   useReducer,
   useRef,
 } from 'react';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -25,6 +26,7 @@ import createAttributesLayout from './utils/createAttributesLayout';
 import { LinkWrapper, SubWrapper } from './components';
 import init from './init';
 import reducer, { initialState } from './reducer';
+import { createPopper } from '@popperjs/core';
 
 const EditView = ({
   components,
@@ -93,6 +95,8 @@ const EditView = ({
     [getField]
   );
 
+  console.log('please')
+
   // Check if a block is a dynamic zone
   const isDynamicZone = useCallback(
     block => {
@@ -119,6 +123,16 @@ const EditView = ({
     formattedContentTypeLayout,
     isDraggingComponent,
   } = reducerState.toJS();
+
+  const techState = [
+    { label: "Apple", value: 1 },
+    { label: "Facebook", value: 2 },
+    { label: "Netflix", value: 3 },
+    { label: "Tesla", value: 4 },
+    { label: "Amazon", value: 5 },
+    { label: "Alphabet", value: 6 },
+  ]
+
 
   // We can't use the getQueryParameters helper here because the search
   // can contain 'redirectUrl' several times since we can navigate between documents
@@ -154,6 +168,27 @@ const EditView = ({
         <Container className="container-fluid">
           <Header />
           <div className="row" style={{ paddingTop: 3 }}>
+            {/* <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Versions</button>
+            <div id="myDropdown" class="dropdown-content">
+                    <a href="javascript:void(0)">Link 1</a>
+                    <a href="javascript:void(0)">Link 2</a>
+                    <a href="javascript:void(0)">Link 3</a>
+            </div>
+          </div> */}
+            {/* <Dropdown
+              title="Select location"
+              list={state.location}
+            /> */}
+            <div className="container">
+              <div className="row">
+                <div className="col-md-4"></div>
+                <div className="col-md-4">
+                  <Select options={techState} />
+                </div>
+                <div className="col-md-4"></div>
+              </div>
+            </div>
             <div className="col-md-12 col-lg-9" style={{ marginBottom: 13 }}>
               {formattedContentTypeLayout.map((block, blockIndex) => {
                 if (isDynamicZone(block)) {
@@ -222,7 +257,7 @@ const EditView = ({
                                   keys={name}
                                   layout={currentContentTypeLayoutData}
                                   name={name}
-                                  onChange={() => {}}
+                                  onChange={() => { }}
                                 />
                               </div>
                             );
@@ -298,7 +333,7 @@ const EditView = ({
 
 EditView.defaultProps = {
   currentEnvironment: 'production',
-  emitEvent: () => {},
+  emitEvent: () => { },
   plugins: {},
 };
 
