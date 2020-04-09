@@ -56,6 +56,32 @@ module.exports = {
     // );
   },
 
+  async fetchVersions(params) {
+    const { id, model } = params;
+    let objectParams = {
+      Bucket: process.env.AWS_BUCKET,
+      Prefix: 'restaurants/28.JSON'
+    }
+
+    try{
+      const previousVersion = await s3.listObjectVersions(params).promise().then( result => {
+        const versions = result.Versions
+        const versionList = []
+        // console.log(versions)
+        for (i=0;i<=versions.length; i++) {
+          versionList.push(versions[i].VersionId)
+          console.log(versions[i].VersionId)
+          // console.log('hit')
+        }
+        console.log(versionList)
+        return versionList;
+      })
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  },
+
   count(params, query) {
     const { model } = params;
     const { ...filters } = query;

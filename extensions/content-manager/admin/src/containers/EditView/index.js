@@ -26,7 +26,8 @@ import createAttributesLayout from './utils/createAttributesLayout';
 import { LinkWrapper, SubWrapper } from './components';
 import init from './init';
 import reducer, { initialState } from './reducer';
-import { createPopper } from '@popperjs/core';
+
+const modelName;
 
 const EditView = ({
   components,
@@ -53,10 +54,12 @@ const EditView = ({
     () => get(allLayoutData, ['contentType'], {}),
     [allLayoutData]
   );
+  console.log(allLayoutData)
   const currentContentTypeLayout = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'edit'], []),
     [currentContentTypeLayoutData]
   );
+  modelName = currentContentTypeLayoutData.uid
   const currentContentTypeLayoutRelations = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'editRelations'], []),
     [currentContentTypeLayoutData]
