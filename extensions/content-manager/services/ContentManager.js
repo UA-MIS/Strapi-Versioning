@@ -58,6 +58,8 @@ module.exports = {
 
   async fetchVersions(params) {
     const { id, model } = params;
+    console.log(params)
+    console.log('hit')
     let objectParams = {
       Bucket: process.env.AWS_BUCKET,
       Prefix: 'restaurants/28.JSON',
@@ -65,7 +67,7 @@ module.exports = {
 
     try {
       const fetchedVersions = await s3
-        .listObjectVersions(params)
+        .listObjectVersions(objectParams)
         .promise()
         .then((result) => {
           const versions = result.Versions;
