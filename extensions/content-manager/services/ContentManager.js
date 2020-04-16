@@ -58,11 +58,10 @@ module.exports = {
 
   async fetchVersions(params) {
     const { id, model } = params;
-    console.log(params)
-    console.log('hit')
+    var modelName = model.split('.');
     let objectParams = {
       Bucket: process.env.AWS_BUCKET,
-      Prefix: 'restaurants/28.JSON',
+      Prefix: modelName[1] + '/' + id + '.JSON',
     };
 
     try {
