@@ -53,6 +53,7 @@ const EditView = ({
     () => get(allLayoutData, ['contentType'], {}),
     [allLayoutData]
   );
+  console.log('Layout Data:' + allLayoutData)
   const currentContentTypeLayout = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'edit'], []),
     [currentContentTypeLayoutData]
@@ -88,13 +89,14 @@ const EditView = ({
     },
     [getField]
   );
+  console.log('fieldTYPE:' + fieldName)
   const getFieldComponentUid = useCallback(
     (fieldName) => {
       return get(getField(fieldName), ['component'], '');
     },
     [getField]
   );
-
+  console.log('fieldName:' + fieldName)
   // Check if a block is a dynamic zone
   const isDynamicZone = useCallback(
     (block) => {
@@ -145,6 +147,10 @@ const EditView = ({
   //   console.log('Versions data changed: ', versionsData);
   // }, [versionsData]);
 
+  function versionSelected(v) {
+    console.log(v.value)
+  }
+
   return (
     <EditViewProvider
       allLayoutData={allLayoutData}
@@ -176,7 +182,7 @@ const EditView = ({
               <div className='row'>
                 <div className='col-md-4'></div>
                 <div className='col-md-4'>
-                  <Select options={versionsData} />
+                  <Select options={versionsData} onChange={versionSelected} />
                 </div>
                 <div className='col-md-4'></div>
               </div>

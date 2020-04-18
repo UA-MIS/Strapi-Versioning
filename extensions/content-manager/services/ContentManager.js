@@ -32,28 +32,39 @@ module.exports = {
   },
 
   async fetch(params, populate) {
-    const { id, model } = params;
+    const { id, model, version } = params;
+    var modelName = model.split('.');
+    if (version != null) {
+      var getParams = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: modelName[1] + '/' + params.id + '.JSON',
+      versionId: version,
+      };
+    } else {
+      var getParams = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: modelName[1] + '/' + params.id + '.JSON',
+        };
+    }
+    var dataReturned = await s3.getObject(getParams).promise();
+    dataReturned = JSON.parse(dataReturned.Body.toString());
+    console.log(dataReturned);
+    return dataReturned;
+  },
+
+  async fetchByVersionID(params) {
+    const { id, model, version } = params;
     var modelName = model.split('.');
     var getParams = {
       Bucket: process.env.AWS_BUCKET,
       Key: modelName[1] + '/' + params.id + '.JSON',
-      // VersionId: '8LmPm9ryal27CWDDU4pXV_KyKLFP9klP'
+      VersionId: version
     };
 
     var dataReturned = await s3.getObject(getParams).promise();
     dataReturned = JSON.parse(dataReturned.Body.toString());
     console.log(dataReturned);
     return dataReturned;
-
-    // return strapi.entityService.findOne(
-    //   {
-    //     params: {
-    //       id,
-    //     },
-    //     populate,
-    //   },
-    //   { model }
-    // );
   },
 
   async fetchVersions(params) {
