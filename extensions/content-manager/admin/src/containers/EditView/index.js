@@ -11,7 +11,7 @@ import React, {
 } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Select from 'react-select';
-import { BackHeader, LiLink } from 'strapi-helper-plugin';
+import { BackHeader, LiLink, request } from 'strapi-helper-plugin';
 import Container from '../../components/Container';
 import DynamicZone from '../../components/DynamicZone';
 import FieldComponent from '../../components/FieldComponent';
@@ -53,7 +53,6 @@ const EditView = ({
     () => get(allLayoutData, ['contentType'], {}),
     [allLayoutData]
   );
-  console.log('Layout Data:' + allLayoutData)
   const currentContentTypeLayout = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'edit'], []),
     [currentContentTypeLayoutData]
@@ -89,14 +88,12 @@ const EditView = ({
     },
     [getField]
   );
-  console.log('fieldTYPE:' + fieldName)
   const getFieldComponentUid = useCallback(
     (fieldName) => {
       return get(getField(fieldName), ['component'], '');
     },
     [getField]
   );
-  console.log('fieldName:' + fieldName)
   // Check if a block is a dynamic zone
   const isDynamicZone = useCallback(
     (block) => {
@@ -147,7 +144,9 @@ const EditView = ({
   //   console.log('Versions data changed: ', versionsData);
   // }, [versionsData]);
 
-  function versionSelected(v) {
+  const versionSelected = async (v) => {
+    console.log(redirectURL)
+    request('/plugins/content-manager/application::restaurants.restaurants/28/9LuTmmWFKhTDXapXAbyHFVsjfK5LrbFM'); 
     console.log(v.value)
   }
 

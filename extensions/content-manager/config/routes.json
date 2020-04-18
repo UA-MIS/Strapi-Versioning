@@ -97,6 +97,14 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/explorer/:model/:id/:version",
+      "handler": "ContentManager.fetchVersionByID",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
       "method": "POST",
       "path": "/explorer/:model",
       "handler": "ContentManager.create",

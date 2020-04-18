@@ -34,11 +34,13 @@ module.exports = {
   async fetch(params, populate) {
     const { id, model, version } = params;
     var modelName = model.split('.');
+    console.log(version)
+    console.log(id)
     if (version != null) {
       var getParams = {
       Bucket: process.env.AWS_BUCKET,
       Key: modelName[1] + '/' + params.id + '.JSON',
-      versionId: version,
+      VersionId: version,
       };
     } else {
       var getParams = {
@@ -54,6 +56,7 @@ module.exports = {
 
   async fetchByVersionID(params) {
     const { id, model, version } = params;
+    console.log('Hit fetchVersion by ID')
     var modelName = model.split('.');
     var getParams = {
       Bucket: process.env.AWS_BUCKET,
