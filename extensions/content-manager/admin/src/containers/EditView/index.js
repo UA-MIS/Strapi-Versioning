@@ -53,9 +53,12 @@ const EditView = ({
     () => get(allLayoutData, ['contentType'], {}),
     [allLayoutData]
   );
+ 
+  var modelName = '';
   const currentContentTypeLayout = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'edit'], []),
-    [currentContentTypeLayoutData]
+    [currentContentTypeLayoutData],
+    modelName = currentContentTypeLayoutData.uid
   );
   const currentContentTypeLayoutRelations = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'editRelations'], []),
@@ -80,7 +83,8 @@ const EditView = ({
     (fieldName) => {
       return get(currentContentTypeSchema, ['attributes', fieldName], {});
     },
-    [currentContentTypeSchema]
+    [currentContentTypeSchema],
+    console.log(currentContentTypeSchema)
   );
   const getFieldType = useCallback(
     (fieldName) => {
@@ -138,16 +142,21 @@ const EditView = ({
     const versions = event.map((v) => {
       return { label: v, value: v };
     });
+    console.log(versions)
     setVersionsData(versions);
+    console.log(versionsData)
   };
   // useEffect(() => {
   //   console.log('Versions data changed: ', versionsData);
   // }, [versionsData]);
 
   const versionSelected = async (v) => {
-    console.log(redirectURL)
-    request('/plugins/content-manager/application::restaurants.restaurants/28/9LuTmmWFKhTDXapXAbyHFVsjfK5LrbFM'); 
+    var dataPulled = await request('/content-manager/explorer/' + modelName + '/28/' + v.value)
+    .then((result) => {
+      return result
+    }); 
     console.log(v.value)
+    console.log(dataPulled)
   }
 
   return (
