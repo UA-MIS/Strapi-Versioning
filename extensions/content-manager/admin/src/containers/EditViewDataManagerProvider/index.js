@@ -58,50 +58,23 @@ const EditViewDataManagerProvider = ({
     const fetchData = async () => {
       try {
         console.log('Fetching data for ID: ', id);
-        // const data = '';
-        // if (versionID != null) {
-        //    const data = await request(getRequestUrl(`${slug}/${id}/${versionID}`), {
-        //     method: 'GET',
-        //     signal,
-        //   });
-        // } else {
           const data = await request(getRequestUrl(`${slug}/${id}/`), {
           method: 'GET',
           signal,
         });
-        // }
         console.log('Data fetched:', data);
 
         dispatch({
           type: 'GET_DATA_SUCCEEDED',
           data,
         });
+       
       } catch (err) {
         if (err.code !== 20) {
           strapi.notification.error(`${pluginId}.error.record.fetch`);
         }
       }
     };
-
-    // const fetchDataByVID = async () => {
-    //   try {
-    //     console.log('Fetching data for ID: ', id);
-    //     const data = await request(getRequestUrl(`${slug}/${id}/${versionID}`), {
-    //       method: 'GET',
-    //       signal,
-    //     });
-    //     console.log('Data fetched:', data);
-
-    //     dispatch({
-    //       type: 'GET_DATA_SUCCEEDED',
-    //       data,
-    //     });
-    //   } catch (err) {
-    //     if (err.code !== 20) {
-    //       strapi.notification.error(`${pluginId}.error.record.fetch`);
-    //     }
-    //   }
-    // };
 
     const fetchVersions = async () => {
       try {

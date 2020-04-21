@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { BackHeader, LiLink, request } from 'strapi-helper-plugin';
 import Container from '../../components/Container';
@@ -35,6 +35,7 @@ const EditView = ({
   plugins,
   slug,
 }) => {
+  const { id, version } = useParams();
   const formatLayoutRef = useRef();
   formatLayoutRef.current = createAttributesLayout;
   // Retrieve push to programmatically navigate between views
@@ -84,7 +85,6 @@ const EditView = ({
       return get(currentContentTypeSchema, ['attributes', fieldName], {});
     },
     [currentContentTypeSchema],
-    console.log(currentContentTypeSchema)
   );
   const getFieldType = useCallback(
     (fieldName) => {
@@ -135,6 +135,8 @@ const EditView = ({
     .join('');
   const redirectToPreviousPage = () => push(redirectURL);
 
+  // var id;
+
   // Track versions data state change.
   const [versionsData, setVersionsData] = useState([]);
   const handleVersionsDataChange = (event) => {
@@ -142,21 +144,26 @@ const EditView = ({
     const versions = event.map((v) => {
       return { label: v, value: v };
     });
-    console.log(versions)
     setVersionsData(versions);
-    console.log(versionsData)
   };
-  // useEffect(() => {
-  //   console.log('Versions data changed: ', versionsData);
-  // }, [versionsData]);
 
   const versionSelected = async (v) => {
-    var dataPulled = await request('/content-manager/explorer/' + modelName + '/28/' + v.value)
+    var dataPulled = await request('/content-manager/explorer/' + modelName + '/' + id + '/' + v.value)
     .then((result) => {
       return result
     }); 
-    console.log(v.value)
     console.log(dataPulled)
+    getUrlVars();
+  }
+
+  function getUrlVars() {
+    const queryString = window.location.search;
+    console.log(queryString);
+    // var vars = {};
+    // var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    //     vars[key] = value;
+    // });
+    // return parts;
   }
 
   return (
@@ -181,6 +188,7 @@ const EditView = ({
         onVersionsDataChange={handleVersionsDataChange}
         redirectToPreviousPage={redirectToPreviousPage}
         slug={slug}
+        // onFetchData={handleFetchData}
       >
         <BackHeader onClick={() => redirectToPreviousPage()} />
         <Container className='container-fluid'>
