@@ -158,7 +158,7 @@ const EditView = ({
     // }); 
     // console.log(v.value)
     // console.log(dataPulled)
-    return <Redirect to={`/${id}/${version}`} />;
+    return <Redirect to={`/${id}/${v.value}`} />;
   };
 
   return (
