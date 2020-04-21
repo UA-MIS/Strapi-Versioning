@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { BackHeader, LiLink, request } from 'strapi-helper-plugin';
 import Container from '../../components/Container';
@@ -35,6 +35,7 @@ const EditView = ({
   plugins,
   slug,
 }) => {
+  const { id, version } = useParams();
   const formatLayoutRef = useRef();
   formatLayoutRef.current = createAttributesLayout;
   // Retrieve push to programmatically navigate between views
@@ -150,14 +151,15 @@ const EditView = ({
   //   console.log('Versions data changed: ', versionsData);
   // }, [versionsData]);
 
-  const versionSelected = async (v) => {
-    var dataPulled = await request('/content-manager/explorer/' + modelName + '/28/' + v.value)
-    .then((result) => {
-      return result
-    }); 
-    console.log(v.value)
-    console.log(dataPulled)
-  }
+  const versionSelected = (v) => {
+    // var dataPulled = await request('/content-manager/explorer/' + modelName + '/28/' + v.value)
+    // .then((result) => {
+    //   return result
+    // }); 
+    // console.log(v.value)
+    // console.log(dataPulled)
+    return <Redirect to={`/${id}/${version}`} />;
+  };
 
   return (
     <EditViewProvider

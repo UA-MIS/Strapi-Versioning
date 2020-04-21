@@ -24,6 +24,7 @@ const RecursivePath = props => {
       comp: EditSettingsView,
     },
     { path: ':id', comp: EditView },
+    { path: ':id/:version', comp: EditView },
     { path: '', comp: ListView },
   ].map(({ path, comp }) => (
     <Route

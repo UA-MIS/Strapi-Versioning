@@ -26,7 +26,7 @@ const EditViewDataManagerProvider = ({
   redirectToPreviousPage,
   slug,
 }) => {
-  const { id } = useParams();
+  const { id, version } = useParams();
   // Retrieve the search
   const [reducerState, dispatch] = useReducer(reducer, initialState, init);
   const {
@@ -83,25 +83,25 @@ const EditViewDataManagerProvider = ({
       }
     };
 
-    // const fetchDataByVID = async () => {
-    //   try {
-    //     console.log('Fetching data for ID: ', id);
-    //     const data = await request(getRequestUrl(`${slug}/${id}/${versionID}`), {
-    //       method: 'GET',
-    //       signal,
-    //     });
-    //     console.log('Data fetched:', data);
+    const fetchDataByVID = async () => {
+      try {
+        console.log('Fetching data for ID: ', id, 'version: ', version);
+        const data = await request(getRequestUrl(`${slug}/${id}/${version}`), {
+          method: 'GET',
+          signal,
+        });
+        console.log('Data fetched:', data);
 
-    //     dispatch({
-    //       type: 'GET_DATA_SUCCEEDED',
-    //       data,
-    //     });
-    //   } catch (err) {
-    //     if (err.code !== 20) {
-    //       strapi.notification.error(`${pluginId}.error.record.fetch`);
-    //     }
-    //   }
-    // };
+        dispatch({
+          type: 'GET_DATA_SUCCEEDED',
+          data,
+        });
+      } catch (err) {
+        if (err.code !== 20) {
+          strapi.notification.error(`${pluginId}.error.record.fetch`);
+        }
+      }
+    };
 
     const fetchVersions = async () => {
       try {
@@ -148,7 +148,12 @@ const EditViewDataManagerProvider = ({
     });
 
     if (!isCreatingEntry) {
-      fetchData();
+      if (version) {
+        fetchDataByVID();
+      }
+      else {
+        fetchData();
+      }
       fetchVersions();
     } else {
       console.log('SET_DEFAULT_MODIFIED_DATA_STRUCTURE');
@@ -163,7 +168,7 @@ const EditViewDataManagerProvider = ({
       abortController.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, slug]);
+  }, [id, version, slug]);
 
   const addComponentToDynamicZone = (
     keys,
