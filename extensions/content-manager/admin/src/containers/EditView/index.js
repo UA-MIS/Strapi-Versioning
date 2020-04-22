@@ -153,17 +153,6 @@ const EditView = ({
       return result
     }); 
     console.log(dataPulled)
-    getUrlVars();
-  }
-
-  function getUrlVars() {
-    const queryString = window.location.search;
-    console.log(queryString);
-    // var vars = {};
-    // var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-    //     vars[key] = value;
-    // });
-    // return parts;
   }
 
   return (
