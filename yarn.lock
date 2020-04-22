@@ -4974,10 +4974,10 @@ knex@<0.20.0:
     uuid "^3.3.3"
     v8flags "^3.1.3"
 
-knex@^0.16.5:
-  version "0.16.5"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.16.5.tgz#8ba3806289a5d543dd42ed21420a31c578476993"
-  integrity sha512-1RVxMU8zGOBqgmXlAvs8vohg9MD14iiRZZPe0IeQXd554n4xxPmoMkbH4hlFeqfM6eOdFE3AVqVSncL3YuocqA==
+knex@^0.20.0:
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.20.0.tgz#f1c83718ab60da2fc81ff00de1dd4616400564dd"
+  integrity sha512-2IQUDItwSAuhTxtH/T4VibEuFMngI9LUkpgM0qD/JH1xWARRtWIJ9mU8hNNnFgrKh9RZdPYZToBgsV/UEaje4g==
   dependencies:
     "@babel/polyfill" "^7.4.3"
     "@types/bluebird" "^3.5.26"
