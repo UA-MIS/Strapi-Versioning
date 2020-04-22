@@ -1,33 +1,32 @@
+import { get } from 'lodash';
+import PropTypes from 'prop-types';
 import React, {
   memo,
   useCallback,
-  useMemo,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
+  useState,
 } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Select from 'react-select';
-import PropTypes from 'prop-types';
-import { get } from 'lodash';
-import { useHistory, useLocation } from 'react-router-dom';
-import { BackHeader, LiLink } from 'strapi-helper-plugin';
-import pluginId from '../../pluginId';
+import { BackHeader, LiLink, request } from 'strapi-helper-plugin';
 import Container from '../../components/Container';
 import DynamicZone from '../../components/DynamicZone';
-import FormWrapper from '../../components/FormWrapper';
 import FieldComponent from '../../components/FieldComponent';
+import FormWrapper from '../../components/FormWrapper';
 import Inputs from '../../components/Inputs';
 import SelectWrapper from '../../components/SelectWrapper';
+import pluginId from '../../pluginId';
 import getInjectedComponents from '../../utils/getComponents';
 import EditViewDataManagerProvider from '../EditViewDataManagerProvider';
 import EditViewProvider from '../EditViewProvider';
-import Header from './Header';
-import createAttributesLayout from './utils/createAttributesLayout';
 import { LinkWrapper, SubWrapper } from './components';
+import Header from './Header';
 import init from './init';
 import reducer, { initialState } from './reducer';
-
-const modelName;
+import createAttributesLayout from './utils/createAttributesLayout';
 
 const EditView = ({
   components,
@@ -36,6 +35,7 @@ const EditView = ({
   plugins,
   slug,
 }) => {
+  const { id, version } = useParams();
   const formatLayoutRef = useRef();
   formatLayoutRef.current = createAttributesLayout;
   // Retrieve push to programmatically navigate between views
@@ -54,12 +54,13 @@ const EditView = ({
     () => get(allLayoutData, ['contentType'], {}),
     [allLayoutData]
   );
-  console.log(allLayoutData)
+ 
+  var modelName = '';
   const currentContentTypeLayout = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'edit'], []),
-    [currentContentTypeLayoutData]
+    [currentContentTypeLayoutData],
+    modelName = currentContentTypeLayoutData.uid
   );
-  modelName = currentContentTypeLayoutData.uid
   const currentContentTypeLayoutRelations = useMemo(
     () => get(currentContentTypeLayoutData, ['layouts', 'editRelations'], []),
     [currentContentTypeLayoutData]
@@ -70,7 +71,7 @@ const EditView = ({
   );
 
   const getFieldMetas = useCallback(
-    fieldName => {
+    (fieldName) => {
       return get(
         currentContentTypeLayoutData,
         ['metadatas', fieldName, 'edit'],
@@ -80,31 +81,30 @@ const EditView = ({
     [currentContentTypeLayoutData]
   );
   const getField = useCallback(
-    fieldName => {
+    (fieldName) => {
       return get(currentContentTypeSchema, ['attributes', fieldName], {});
     },
-    [currentContentTypeSchema]
+    [currentContentTypeSchema],
   );
   const getFieldType = useCallback(
-    fieldName => {
+    (fieldName) => {
       return get(getField(fieldName), ['type'], '');
     },
     [getField]
   );
   const getFieldComponentUid = useCallback(
-    fieldName => {
+    (fieldName) => {
       return get(getField(fieldName), ['component'], '');
     },
     [getField]
   );
-
-  console.log('please')
-
   // Check if a block is a dynamic zone
   const isDynamicZone = useCallback(
-    block => {
-      return block.every(subBlock => {
-        return subBlock.every(obj => getFieldType(obj.name) === 'dynamiczone');
+    (block) => {
+      return block.every((subBlock) => {
+        return subBlock.every(
+          (obj) => getFieldType(obj.name) === 'dynamiczone'
+        );
       });
     },
     [getFieldType]
@@ -127,16 +127,6 @@ const EditView = ({
     isDraggingComponent,
   } = reducerState.toJS();
 
-  const techState = [
-    { label: "Apple", value: 1 },
-    { label: "Facebook", value: 2 },
-    { label: "Netflix", value: 3 },
-    { label: "Tesla", value: 4 },
-    { label: "Amazon", value: 5 },
-    { label: "Alphabet", value: 6 },
-  ]
-
-
   // We can't use the getQueryParameters helper here because the search
   // can contain 'redirectUrl' several times since we can navigate between documents
   const redirectURL = search
@@ -144,6 +134,26 @@ const EditView = ({
     .filter((_, index) => index !== 0)
     .join('');
   const redirectToPreviousPage = () => push(redirectURL);
+
+  // var id;
+
+  // Track versions data state change.
+  const [versionsData, setVersionsData] = useState([]);
+  const handleVersionsDataChange = (event) => {
+    // Map versions to select options.
+    const versions = event.map((v) => {
+      return { label: v, value: v };
+    });
+    setVersionsData(versions);
+  };
+
+  const versionSelected = async (v) => {
+    var dataPulled = await request('/content-manager/explorer/' + modelName + '/' + id + '/' + v.value)
+    .then((result) => {
+      return result
+    }); 
+    console.log(dataPulled)
+  }
 
   return (
     <EditViewProvider
@@ -164,35 +174,25 @@ const EditView = ({
     >
       <EditViewDataManagerProvider
         allLayoutData={allLayoutData}
+        onVersionsDataChange={handleVersionsDataChange}
         redirectToPreviousPage={redirectToPreviousPage}
         slug={slug}
+        // onFetchData={handleFetchData}
       >
         <BackHeader onClick={() => redirectToPreviousPage()} />
-        <Container className="container-fluid">
+        <Container className='container-fluid'>
           <Header />
-          <div className="row" style={{ paddingTop: 3 }}>
-            {/* <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn">Versions</button>
-            <div id="myDropdown" class="dropdown-content">
-                    <a href="javascript:void(0)">Link 1</a>
-                    <a href="javascript:void(0)">Link 2</a>
-                    <a href="javascript:void(0)">Link 3</a>
-            </div>
-          </div> */}
-            {/* <Dropdown
-              title="Select location"
-              list={state.location}
-            /> */}
-            <div className="container">
-              <div className="row">
-                <div className="col-md-4"></div>
-                <div className="col-md-4">
-                  <Select options={techState} />
+          <div className='row' style={{ paddingTop: 3 }}>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-md-4'></div>
+                <div className='col-md-4'>
+                  <Select options={versionsData} onChange={versionSelected} />
                 </div>
-                <div className="col-md-4"></div>
+                <div className='col-md-4'></div>
               </div>
             </div>
-            <div className="col-md-12 col-lg-9" style={{ marginBottom: 13 }}>
+            <div className='col-md-12 col-lg-9' style={{ marginBottom: 13 }}>
               {formattedContentTypeLayout.map((block, blockIndex) => {
                 if (isDynamicZone(block)) {
                   const {
@@ -216,7 +216,7 @@ const EditView = ({
                   <FormWrapper key={blockIndex}>
                     {block.map((fieldsBlock, fieldsBlockIndex) => {
                       return (
-                        <div className="row" key={fieldsBlockIndex}>
+                        <div className='row' key={fieldsBlockIndex}>
                           {fieldsBlock.map(({ name, size }, fieldIndex) => {
                             const isComponent =
                               getFieldType(name) === 'component';
@@ -260,7 +260,7 @@ const EditView = ({
                                   keys={name}
                                   layout={currentContentTypeLayoutData}
                                   name={name}
-                                  onChange={() => { }}
+                                  onChange={() => {}}
                                 />
                               </div>
                             );
@@ -273,13 +273,13 @@ const EditView = ({
               })}
             </div>
 
-            <div className="col-md-12 col-lg-3">
+            <div className='col-md-12 col-lg-3'>
               {currentContentTypeLayoutRelations.length > 0 && (
                 <SubWrapper
                   style={{ padding: '0 20px 1px', marginBottom: '25px' }}
                 >
                   <div style={{ paddingTop: '22px' }}>
-                    {currentContentTypeLayoutRelations.map(relationName => {
+                    {currentContentTypeLayoutRelations.map((relationName) => {
                       const relation = get(
                         currentContentTypeLayoutData,
                         ['schema', 'attributes', relationName],
@@ -310,7 +310,7 @@ const EditView = ({
                     message={{
                       id: 'app.links.configure-view',
                     }}
-                    icon="layout"
+                    icon='layout'
                     key={`${pluginId}.link`}
                     url={`ctm-configurations/edit-settings/content-types`}
                     onClick={() => {
@@ -336,7 +336,7 @@ const EditView = ({
 
 EditView.defaultProps = {
   currentEnvironment: 'production',
-  emitEvent: () => { },
+  emitEvent: () => {},
   plugins: {},
 };
 
