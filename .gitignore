@@ -59,7 +59,7 @@ $RECYCLE.BIN/
 *.swm
 *.out
 *.pid
-
+.env
 
 ############################
 # Logs and databases
@@ -110,3 +110,4 @@ coverage
 exports
 .cache
 build
+capstoneNode/index.js

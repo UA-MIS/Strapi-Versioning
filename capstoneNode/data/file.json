@@ -1,0 +1,8 @@
+{
+    "newRestaurant":[
+      {"id": 1, "name":"Biscotte", "description":"biscotte description"},
+      {"id": 2, "name":"Red Lobster", "description":"Red Lobster description"},
+      {"id": 3, "name":"BWW", "description":"BWW description"},
+      {"id": 4, "name":"Chilis", "description":"chilis description"}
+    ]
+    }

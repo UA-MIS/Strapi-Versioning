@@ -11,8 +11,13 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "@popperjs/core": "^2.0.6",
+    "aws-sdk": "^2.621.0",
+    "dotenv": "^8.2.0",
+    "find-config": "^1.0.0",
     "knex": "^0.19.5",
     "mysql": "latest",
+    "react-select": "^3.0.8",
     "strapi": "3.0.0-beta.18.5",
     "strapi-admin": "3.0.0-beta.18.5",
     "strapi-connector-bookshelf": "3.0.0-beta.18.5",
@@ -21,6 +26,8 @@
     "strapi-plugin-email": "3.0.0-beta.18.5",
     "strapi-plugin-upload": "3.0.0-beta.18.5",
     "strapi-plugin-users-permissions": "3.0.0-beta.18.5",
+    "strapi-provider-upload-aws-s3": "^3.0.0-beta.18.7",
+
     "strapi-utils": "3.0.0-beta.18.5"
   },
   "author": {
