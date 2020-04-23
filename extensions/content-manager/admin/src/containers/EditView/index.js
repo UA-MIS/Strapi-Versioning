@@ -138,6 +138,7 @@ const EditView = ({
   // var id;
 
   // Track versions data state change.
+  // Sets value of dropdown with a list of versions associated with the chosen s3 object
   const [versionsData, setVersionsData] = useState([]);
   const handleVersionsDataChange = (event) => {
     // Map versions to select options.
@@ -147,12 +148,13 @@ const EditView = ({
     setVersionsData(versions);
   };
 
+  // This is the method called through the OnChange method in the Select dropdown when selecting a specific version to view
+  // dataPulled Variable contains the information associated with the version selected from the dropdown.
   const versionSelected = async (v) => {
     var dataPulled = await request('/content-manager/explorer/' + modelName + '/' + id + '/' + v.value)
     .then((result) => {
       return result
-    }); 
-    console.log(dataPulled)
+    });
   }
 
   return (
@@ -177,7 +179,6 @@ const EditView = ({
         onVersionsDataChange={handleVersionsDataChange}
         redirectToPreviousPage={redirectToPreviousPage}
         slug={slug}
-        // onFetchData={handleFetchData}
       >
         <BackHeader onClick={() => redirectToPreviousPage()} />
         <Container className='container-fluid'>

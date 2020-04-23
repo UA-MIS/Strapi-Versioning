@@ -30,46 +30,33 @@ module.exports = {
       { model: params.model }
     );
   },
-
+  // Fetches object from s3 bucket based on model name and id passed in through the route params
   async fetch(params, populate) {
-    const { id, model, version } = params;
+    const { id, model } = params;
     var modelName = model.split('.');
-    console.log(version)
-    console.log(id)
-    if (version != null) {
-      var getParams = {
-      Bucket: process.env.AWS_BUCKET,
-      Key: modelName[1] + '/' + params.id + '.JSON',
-      VersionId: version,
-      };
-    } else {
       var getParams = {
         Bucket: process.env.AWS_BUCKET,
         Key: modelName[1] + '/' + params.id + '.JSON',
         };
-    }
     var dataReturned = await s3.getObject(getParams).promise();
     dataReturned = JSON.parse(dataReturned.Body.toString());
-    console.log(dataReturned);
     return dataReturned;
   },
-
+  // Fetches object from s3 bucket based on model name and id passed in through the route params when a version
+  // in the editView dropdown is selected
   async fetchByVersionID(params) {
     const { id, model, version } = params;
-    console.log('Hit fetchVersion by ID')
     var modelName = model.split('.');
     var getParams = {
       Bucket: process.env.AWS_BUCKET,
       Key: modelName[1] + '/' + params.id + '.JSON',
       VersionId: version
     };
-
     var dataReturned = await s3.getObject(getParams).promise();
     dataReturned = JSON.parse(dataReturned.Body.toString());
-    console.log(dataReturned);
     return dataReturned;
   },
-
+  // Fetches list of versions of a selected object
   async fetchVersions(params) {
     const { id, model } = params;
     var modelName = model.split('.');
@@ -86,7 +73,6 @@ module.exports = {
           const versions = result.Versions;
           const versionIdsList =
             (versions && versions.map((v) => v.VersionId)) || [];
-          console.log('Fetched Version IDs:', versionIdsList);
           return versionIdsList;
         });
       return fetchedVersions;
@@ -107,12 +93,13 @@ module.exports = {
     var bufferObject = new Buffer.from(JSON.stringify(data, { files, model }));
     var keyID;
     var modelName = model.split('.');
+    // S3 KeyID comes from the id created when an object is first saved to the database
     var dataCreated = await strapi.entityService
       .create({ data, files }, { model })
       .then(function (response) {
         keyID = response.id;
       });
-
+      //Key is the name of the file as it sits in the S3 bucket, modelName is used to create a psuedo file structure
     var awsParams = {
       Bucket: process.env.AWS_BUCKET,
       Body: bufferObject,
@@ -179,7 +166,6 @@ module.exports = {
         Bucket: process.env.AWS_BUCKET,
         Key: modelName[1] + '/' + query[id] + '.JSON',
       };
-      console.log(id);
       s3.deleteObject(getParams, function (err, data) {
         if (err) {
           console.log(err, err.stack);
