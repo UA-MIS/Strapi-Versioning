@@ -57,12 +57,10 @@ const EditViewDataManagerProvider = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('Fetching data for ID: ', id);
           const data = await request(getRequestUrl(`${slug}/${id}/`), {
           method: 'GET',
           signal,
         });
-        console.log('Data fetched:', data);
 
         dispatch({
           type: 'GET_DATA_SUCCEEDED',
@@ -75,16 +73,14 @@ const EditViewDataManagerProvider = ({
         }
       }
     };
-
+    // Fetches list of versions of the selected object to return to the EditView Dropdown
     const fetchVersions = async () => {
       try {
-        console.log('Fetching versions for ID: ', id);
         const path = `${slug}/${id}/versions`;
         const data = await request(getRequestUrl(path), {
           method: 'GET',
           signal,
         });
-        console.log('Versions fetched:', data);
 
         dispatch({
           type: 'GET_VERSIONS_DATA_SUCCEEDED',

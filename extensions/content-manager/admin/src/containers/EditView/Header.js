@@ -114,7 +114,7 @@ const Header = () => {
     setIsSubmitting();
     try {
       emitEvent('willDeleteEntry');
-      await request(getRequestUrl(`${slug}/${initialData.id}`), {
+      await request(getRequestUrl(`${slug}/${id}`), {
         method: 'DELETE',
       });
 

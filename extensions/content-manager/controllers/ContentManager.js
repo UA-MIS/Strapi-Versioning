@@ -104,10 +104,8 @@ module.exports = {
 
   // Returns object by chosen version
   async fetchVersionByID(ctx) {
-    console.log('ContentManager Version by ID controller: ', ctx.params);
     const contentManagerService =
       strapi.plugins['content-manager'].services.contentmanager;
-    console.log(Object.keys(contentManagerService))
     const entry = await contentManagerService.fetchByVersionID(ctx.params);
 
     // Entry not found
